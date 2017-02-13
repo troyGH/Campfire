@@ -27,6 +27,36 @@ class Home extends CI_Controller {
 		// return to home page, but logged out
 		redirect('home/index');
 	}
+    
+    //Feedback Form 
+    //Email is sent to the teams email.
+    function send_email() {
+        
+        $this->load->library("form_validation");
+        
+        $this->form_validation->set_rules('name', 'Name', 'required|alpha');
+        $this->form_validation->set_rules("email", "Email", "required|valid_email");
+        $this->form_validation->set_rules("message", "Message", "required");
+        
+        if ($this->form_validation->run() == FALSE) {
+            //If it fails, load the home page again.
+            $this->load->view('home_view');
+        } else {
+            $data["message"] = "The email has been successfuly sent";
+            
+            //Email Library
+            $this->load->library('email');
+            
+            //From, To, Subject, Message
+            $this->email->from(set_value("email"), set_value("name"));
+            $this->email->to("teamcampfirellc@gmail.com");
+            $this->email->subject("Campfire");
+            $this->email->message(set_value("message"));
+            
+            //Send email
+            $this->email->send();
+            
+            $this->load->view('home_view', $data);     
+        }   
+    }   
 }
-
-

@@ -1,86 +1,102 @@
-<!DOCTYPE html>
-<html lang='en'>
-<META NAME="Author" CONTENT="Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle, Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma">
-<META NAME="Date" CONTENT="September 1, 2016">
-<META NAME="Copyright" CONTENT="SJSU CMPE165 Fall 2016 Project. All rights reserved.">
-<META NAME="Robots" CONTENT="all">
-<META NAME="Keywords" CONTENT="">
-<META NAME="Description" CONTENT="">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>My Groups | Campfire</title>
-	<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url("img/favicon.ico"); ?>">
-	<!--link local CSS files  :  note that javascript is linked at the bottom of page-->
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap.min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap-theme.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap-theme.min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/custom.css"); ?>">
-</head>
-<body>
-	<nav class="navbar navbar-inverse" role="navigation">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="<?php echo base_url(); ?>index.php/home"><img src="<?php echo base_url("img/Campfire-logo.png"); ?>"></a>
-				<a class="navbar-brand" href="<?php echo base_url(); ?>index.php/home">Campfire</a>
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="collapse navbar-collapse" id="navbar1">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="<?php echo base_url(); ?>index.php/about">About</a></li>
-					<?php if ($this->session->userdata('login')){ ?>
-					<li><p class="navbar-text">Hello <?php echo $this->session->userdata('uname'); ?></p></li>
-					<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Account <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="<?php echo base_url(); ?>index.php/editProfile">Edit Profile</a></li>
-							<li><a href="<?php echo base_url(); ?>index.php/myGroups">My Groups</a></li>
-							<li><a href="<?php echo base_url(); ?>index.php/myEvents">My Events</a></li>
-							<li class="divider"></li>
-							<li><a href="<?php echo base_url(); ?>index.php/home/logout">Log Out</a></li>
-						</ul>
-					</li>
-					<?php } else { ?>
-					<li><a href="<?php echo base_url(); ?>index.php/login">Login</a></li>
-					<li><a href="<?php echo base_url(); ?>index.php/signup">Signup</a></li>
-					<?php } ?>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-4">
-				<h4>Notifications</h4>
-				<p>This is the My Groups Page<p/>
-				<p><p/>
-				<p>Thanks for Logging in!</p>
-				<p>Name: <?php echo $uname; ?></p>
-				<p>Email: <?php echo $uemail; ?></p>
-				<hr/>
-			</div>
-			<div class="col-md-8">
-				<h2>Welcome To Campfire!!!</h2>
-				<p>The purpose of this web app is to do</br>
-				super cool stuff with groups and events</p>
-				<p>GET TO WORK!!!</p>
-			</div>
-		</div>
+<!-- Header -->
+<?php $this->load->view('template/header.php'); ?>
+<!-- End Header -->
+
+<!-- Body -->
+<div class="container custom-body">
+	<div class="row">
+	<div style="padding-top:20px"></div>
+	<div class="container" style="width:40%">
+		<ul class="nav nav-pills nav-justified">
+		<li id="owned_groupsTab" class="active"><a data-toggle="tab" href="#owned_groups">Owned</a></li>
+		<li id="joined_groupsTab"><a data-toggle="tab" href="#joined_groups">Joined</a></li>
+		</ul>
 	</div>
-	<footer class="container-fluid text-center">
-		<p><p>&copy; SJSU CMPE165 Fall 2016 Project. All rights reserved.</p>
-	</footer>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/jquery-1.10.2.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.min.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/custom.js"); ?>"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
-</body>
-</html>
+	<div class="col-md-10 col-md-offset-1 well" id="view_groups">
+		<div style="padding-top:20px"></div>
+		<div class="col-md-12 well" id="group_view_layout">
+			<div class="col-md-1 col-sm-1 col-lg-1 well"></div>
+			<div class="col-md-10 col-sm-10 col-lg-10 well">
+				<div class="card-group">
+				<div class="tab-content">
+					<div id="owned_groups" class="tab-pane fade in active">
+						<?php
+
+							if ($ownedgroups == NULL)
+							{
+								echo '<h4 style="padding-top:30px">No groups owned. Create a group? <a href="createGroup/index">click here</a></h4>';
+							}
+							else {
+								make_tiles("owned", count($ownedgroups), $ownedgroups);
+							}
+						?>
+					</div>
+					<div id="joined_groups" class="tab-pane fade">
+						<?php
+							if ($memberedgroups == NULL)
+							{
+								echo '<h4 style="padding-top:30px">No groups joined. Search for a group to join: <a href="';
+								echo base_url('index.php/Group/search');
+								echo '">click here</a></h4>';
+							}
+							else
+							{
+								make_tiles("membered", count($memberedgroups), $memberedgroups);
+							}
+						?>
+					</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1 col-sm-1 col-lg-1 well"></div>
+	    </div>
+	</div>
+	</div>
+</div>
+<!-- End Body -->
+
+<?php
+
+function make_tiles($set, $size, $groups)
+{
+	
+	if ($set == "owned")
+	{
+		for ($x = 0; $x < $size; $x++) {
+			$truncatedDesc = strlen($groups[$x]->org_description) > 17 ? substr($groups[$x]->org_description, 0, 17).'...' : $groups[$x]->org_description."<br><br>";
+			$truncatedTitle = strlen($groups[$x]->org_title) > 26 ? substr($groups[$x]->org_title, 0, 26).'...' : $groups[$x]->org_title;
+			echo "<div class='col-md-3 card'>";
+			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive' src='";
+			echo base_url()."uploads/".$groups[$x]->org_picture."' alt='".$groups[$x]->org_title."'></a>";
+			echo "<div class='card-block'>";
+			echo "<h5 data-toggle='tooltip' data-placement='top' title='".$groups[$x]->org_title."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
+			echo "<p  data-toggle='tooltip' data-placement='top' title='".$groups[$x]->org_description."' class='card-text'>".$truncatedDesc."</p>
+			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'>See More</a>
+			<p class='card-text'><small class='text-muted'></small></p></div></div>";
+		}
+	}
+	else if ($set == "membered")
+	{
+		for ($x = 0; $x < $size; $x++) {
+			$truncatedDesc = strlen($groups[$x]->org_description) > 17 ? substr($groups[$x]->org_description, 0, 17).'...' : $groups[$x]->org_description."<br><br>";
+			$truncatedTitle = strlen($groups[$x]->org_title) > 26 ? substr($groups[$x]->org_title, 0, 26).'...' : $groups[$x]->org_title;
+			echo "<div class='col-md-3 card'>";
+			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive' src='";
+			echo base_url()."uploads/".$groups[$x]->org_picture."' alt='".$groups[$x]->org_title."'></a>";
+			echo "<div class='card-block'>";
+			echo "<h5 data-toggle='tooltip' data-placement='top' title='".$groups[$x]->org_title."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
+			echo "<p  data-toggle='tooltip' data-placement='top' title='".$groups[$x]->org_description."' class='card-text'>".$truncatedDesc."</p>
+			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'>See More</a>
+			<p class='card-text'><small class='text-muted'></small></p></div></div>";
+		}
+	}
+	else{
+		return;
+	}
+}
+
+?>
+
+<!-- Footer -->
+<?php $this->load->view('template/footer.php'); ?>
+<!-- End Footer -->

@@ -1,74 +1,137 @@
-<!DOCTYPE html>
-<html lang='en'>
-<META NAME="Author" CONTENT="Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle, Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma">
-<META NAME="Date" CONTENT="September 1, 2016">
-<META NAME="Copyright" CONTENT="SJSU CMPE165 Fall 2016 Project. All rights reserved.">
-<META NAME="Robots" CONTENT="all">
-<META NAME="Keywords" CONTENT="">
-<META NAME="Description" CONTENT="">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Home | Campfire</title>
-	<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url("img/favicon.ico"); ?>">
-	<!--link local CSS files  :  note that javascript is linked at the bottom of page-->
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap.min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap-theme.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap-theme.min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/custom.css"); ?>">
-</head>
-<body>
-	<nav class="navbar navbar-inverse" role="navigation">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="<?php echo base_url(); ?>index.php/home"><img src="<?php echo base_url("img/Campfire-logo.png"); ?>"></a>
-				<a class="navbar-brand" href="<?php echo base_url(); ?>index.php/home">Campfire</a>
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="collapse navbar-collapse" id="navbar1">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="<?php echo base_url(); ?>index.php/about">About</a></li>
-					<?php if ($this->session->userdata('login')){ ?>
-					<li><p class="navbar-text">Hello <?php echo $this->session->userdata('uname'); ?></p></li>
-					<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Account <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="<?php echo base_url(); ?>index.php/editProfile">Edit Profile</a></li>
-							<li><a href="<?php echo base_url(); ?>index.php/myGroups">My Groups</a></li>
-							<li><a href="<?php echo base_url(); ?>index.php/myEvents">My Events</a></li>
-							<li class="divider"></li>
-							<li><a href="<?php echo base_url(); ?>index.php/home/logout">Log Out</a></li>
-						</ul>
-					</li>
-					<?php } else { ?>
-					<li><a href="<?php echo base_url(); ?>index.php/login">Login</a></li>
-					<li><a href="<?php echo base_url(); ?>index.php/signup">Signup</a></li>
-					<?php } ?>
-				</ul>
-			</div>
+<!-- Header -->
+<?php $this->load->view('template/header.php'); ?>
+<!-- End Header -->
+
+
+<!-- Body -->
+<header id="first">
+    <div class="header-content">
+        <div class="inner">
+            <h1 class="cursive">Welcome to Campfire <img id="transparentLogo" src="<?php echo base_url("assets/img/ionicons_bonfire.png");?>"></h1>
+            <h4>Connect with others by simply searching for events or groups</h4>
+            <hr>
+            <a id = 'search_events' href="<?php echo base_url(); ?>index.php/event/search" class="btn btn-primary btn-xl">Search Events</a> &nbsp;
+            <a id = 'search_groups' href="<?php echo base_url(); ?>index.php/group/search" class="btn btn-primary btn-xl">Search Groups</a>
+        </div>
+    </div>
+    <video autoplay="" loop="" class="fillWidth fadeIn wow collapse in" data-wow-delay="0.5s" poster="<?php echo base_url("assets/img/Campfire.png"); ?>" id="video-background">
+        <source src="<?php echo base_url("assets/video/Campfire.mp4"); ?>" type="video/mp4">Your browser does not support the video tag. I suggest you upgrade your browser.
+    </video>
+</header>
+
+<section id="about" class="bg-primary">
+<div class="container">
+	<div class="row">
+		<div class="col-md-4 wow fadeInLeft">
+			<h4>Development Team</h4>
+			<img src="<?php echo base_url("assets/img/devteam.JPG"); ?>" class="img-rounded"  width="304" height="236">
 		</div>
-	</nav>
+		<div class="col-md-8">
+			<h2 class="wow fadeInUp">About Us</h2>
+			<p class="wow fadeInUp">
+				Our team believes in bringing people together who have similar interests. </br>
+				We also want those people to have an opportunity to get involved in </br>
+				activities based on those similar interests. This is what we believe a </br>
+				campfire is all about. Campfire allows anyone, whether you are a user or </br>
+				not, to view events happening in your area. </br>
+			</p>
+			<h3 class="wow fadeInRight">
+				Registered User
+			</h3>
+			<p  class="wow fadeInRight">
+				1. Create and join any number of groups based on your interests </br>
+				2. View any events in your area </br>
+				3. View any events in an area you search by zipcode or city,state </br>
+				4. Create events </br>
+				5. Manage group-specific events </br>
+			</p>
+			<h3  class="wow fadeInRight">
+				Guest
+			</h3>
+			<p  class="wow fadeInRight">
+				1. View any events in your area </br>
+				2. View any events in the area you search for by zip code or city, state </br>
+				3. Create events </br>
+			</p>
+			<h3  class="wow fadeInDown">
+				Contact Us
+			</h3>
+			<p  class="wow fadeInDown">
+				Any questions? suggestions? Contact us at <a href = "http://www.gmail.com">teamcampfirellc@gmail.com</a>.
+			</p>
+		</div>
+	</div>
+</div>
+</section>
 
-	<div class="container">
-     <input id="pac-input" class="controls" type="text" placeholder="City, State or Zip">
-     <div id="map"></div>
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-6CzpsxPQPdiOV_3M0QhATgjyTqO7JQE&callback=initMap" async defer></script>
-	</div> <!-- /container -->
+<section id="contact" class="bg-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center">
+                <h2 class="margin-top-0 wow fadeIn">Get in Touch</h2>
+                <hr class="primary">
+                <p>We love feedback. Fill out the form below and we'll get back to you as soon as possible.</p>
+            </div>
+            <div class="col-lg-10 col-lg-offset-1 text-center">
+                <?php
+                $this->load->helper("form");
 
-	<footer class="container-fluid text-center">
-		<p><p>&copy; SJSU CMPE165 Fall 2016 Project. All rights reserved.</p>
-	</footer>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/jquery-1.10.2.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.min.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/custom.js"); ?>"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-</body>
-</html>
+                echo validation_errors();
+
+                echo form_open("/home/send_email");
+                ?>
+
+                <form method="post" action="/home/send_email" class="contact-form row">
+                    <div class="col-md-6">
+                        <label></label>
+                        <input name="name" id="name" type="text" value="<?php echo set_value('name');?>" class="form-control custom-form-control" placeholder="Name">
+                    </div>
+                    <div class="col-md-6">
+                        <label></label>
+                        <input name="email" id="email" type="text" value="<?php echo set_value('email');?>" class="form-control custom-form-control" placeholder="Email">
+                    </div>
+                    <div class="col-md-12">
+                        <label></label>
+                        <textarea name="message" id="message" class="form-control custom-form-control" rows="9" placeholder="Your message here.."><?php echo set_value('message');?></textarea>
+                    </div>
+                    <div class="col-md-4 col-md-offset-4">
+                        <label></label>
+<!--                        <button type="button" data-toggle="modal" data-target="#alertModal" class="btn btn-warning btn-block btn-lg">Send <i class="ion-android-arrow-forward"></i></button>-->
+                        <input type="submit" class=" btn btn-warning btn-xl wow fadeInDown" name="submit" value="Submit"/>
+                    </div>
+                </form>
+
+                <?php echo form_close(); ?>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- End Body -->
+<script>
+$(".page-scroll").on("click", function(event) {
+      var $ele = $(this);
+      $('html, body').stop().animate({
+          scrollTop: ($($ele.attr('href')).offset().top - 60)
+      }, 1450, 'easeInOutExpo');
+      event.preventDefault();
+});
+$('#topNav').affix({
+    offset: {
+        top: 200
+    }
+});
+
+new WOW().init();
+
+$('.navbar-collapse ul li a').click(function() {
+    /* always close responsive nav after click */
+    $('.navbar-toggle:visible').click();
+});
+
+</script>
+
+<!-- Footer -->
+<?php $this->load->view('template/footer.php'); ?>
+<!-- End Footer -->

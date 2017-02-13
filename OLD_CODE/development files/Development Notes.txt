@@ -1,8 +1,0 @@
--MVC -> 
-.html files are essentially View
-.php files are  essentially Model 
-.js files are essentially Controller
-
--Use template.html to create a .html file, and template.php to create a .php file.
--Use custom.css for custom styling, be sure to comment what it's for.
--Use custom.js for custom javascript functions, be sure to comment what it's for. 

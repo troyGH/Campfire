@@ -1,82 +1,105 @@
-<!DOCTYPE html>
-<html lang='en'>
-<META NAME="Author" CONTENT="Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle, Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma">
-<META NAME="Date" CONTENT="September 1, 2016">
-<META NAME="Copyright" CONTENT="SJSU CMPE165 Fall 2016 Project. All rights reserved.">
-<META NAME="Robots" CONTENT="all">
-<META NAME="Keywords" CONTENT="">
-<META NAME="Description" CONTENT="">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Search Groups | Campfire</title>
-	<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url("img/favicon.ico"); ?>">
-	<!--link local CSS files  :  note that javascript is linked at the bottom of page-->
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap.min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap-theme.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap-theme.min.css"); ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/custom.css"); ?>">
-</head>
-<body>
-	<nav class="navbar navbar-inverse" role="navigation">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="<?php echo base_url(); ?>index.php/home"><img src="<?php echo base_url("img/Campfire-logo.png"); ?>"></a>
-				<a class="navbar-brand" href="<?php echo base_url(); ?>index.php/home">Campfire</a>
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="collapse navbar-collapse" id="navbar1">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="<?php echo base_url(); ?>index.php/about">About</a></li>
-					<?php if ($this->session->userdata('login')){ ?>
-					<li><p class="navbar-text">Hello <?php echo $this->session->userdata('uname'); ?></p></li>
-					<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Account <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="<?php echo base_url(); ?>index.php/editProfile">Edit Profile</a></li>
-							<li><a href="<?php echo base_url(); ?>index.php/myGroups">My Groups</a></li>
-							<li><a href="<?php echo base_url(); ?>index.php/myEvents">My Events</a></li>
-							<li class="divider"></li>
-							<li><a href="<?php echo base_url(); ?>index.php/home/logout">Log Out</a></li>
-						</ul>
-					</li>
-					<?php } else { ?>
-					<li><a href="<?php echo base_url(); ?>index.php/login">Login</a></li>
-					<li><a href="<?php echo base_url(); ?>index.php/signup">Signup</a></li>
-					<?php } ?>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-4">
-				<h4>Notification</h4>
-				<p>This is the Search Groups Page.</p>
-				<p>Search Groups Stuff.</p>
-			</div>
-			<div class="col-md-8">
-				<h2>Welcome To Campfire!!!</h2>
-				<p>The purpose of this web app is to do</br>
-				super cool stuff with groups and events</p>
-				<p>GET TO WORK!!!</p>
-			</div>
-		</div>
-	</div>
-	<footer class="container-fluid text-center">
-		<p><p>&copy; SJSU CMPE165 Fall 2016 Project. All rights reserved.</p>
-	</footer>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/jquery-1.10.2.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.min.js"); ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url("assets/js/custom.js"); ?>"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
-</body>
-</html>
+<!-- Header -->
+<?php $this->load->view('template/header.php'); ?>
+<!-- End Header -->
+<!-- Body -->
+
+<div class="container custom-body">
+	<?php $attributes = array("class" => "form-wrapper cf", "method" => "get");
+				echo form_open("group/search", $attributes); ?>
+				<div class="form-group">
+					<input type="text" class="form-control" id="groupQuery" name="groupQuery" placeholder="Enter a city or zip..." required>
+					<button type="submit" id="searchButton">Search </button>
+				</div>
+	<?php echo form_close(); ?>
+
+	    <div class="col-md-10 col-md-offset-1 well" id="search-group-well">
+						<?php
+							if(isset($groups)) {
+								echo "<h5>".count($groups)." Group(s) Found:</h5>";
+							}
+							else{
+								if($this->input->get('groupQuery')){
+									echo "<h5>0 Groups Found</h5>";
+								}
+								else{
+									if(isset($random)){
+										echo "<h5>Here are some random groups:</h5>";
+									}
+								}
+							} ?>
+							<div class="col-md-2 col-sm-2 col-lg-2 well" style="min-height: 100px;">
+								<div class="form-group">
+								  <label for="select-tag">Filter:</label>
+									<?php	$options = array('All'=> 'All','Movies' => 'Movies','Education' => 'Education','Sports' => 'Sports','Food' => 'Food','Coffee'=> 'Coffee');
+									$extra = 'class="form-control" id="select-tag" method="POST"';
+									echo form_dropdown('tag', $options, 'large', $extra);?>
+								</div>
+							</div>
+							<div class="col-md-10 col-sm-10 col-lg-10 well">
+								<div class="card-group">
+							<?php
+								if(isset($groups)) {
+										displayTiles($groups);
+								}else{
+										if(isset($random)){
+											displayTiles($random);
+
+										}
+									}
+									?>
+									<div class="col-md-12 col-sm-12 col-lg-12">
+										<?php $ci =& get_instance(); echo $ci->pagination->create_links(); ?>
+									</div>
+							</div>
+						</div>
+	    </div>
+</div>
+<!-- End Body -->
+
+<!-- Footer -->
+<?php $this->load->view('template/footer.php'); ?>
+<!-- End Footer -->
+
+<?php
+
+function displayTiles($groups){
+	$ci =& get_instance();
+	$per_page = $ci->input->get('per_page');
+	$index = 12 * $per_page;
+	$max = $index + 12;
+	if($max > count($groups)-1){
+		$max = count($groups); //in case of out of range error
+	}
+	for ($x = $index; $x < $max; $x++) {
+		$truncatedDesc = strlen($groups[$x]['org_description']) > 17 ? substr($groups[$x]['org_description'], 0, 17).'...' : $groups[$x]['org_description']."<br><br>";
+		$truncatedTitle = strlen($groups[$x]['org_title']) > 26 ? substr($groups[$x]['org_title'], 0, 26).'...' : $groups[$x]['org_title'];
+		echo "<div class='col-md-3 card filter ".$groups[$x]['tag_title']."'>";
+		echo "<a id='".$groups[$x]['org_id']."' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'><img class='img-responsive' src='";
+		echo base_url()."uploads/".$groups[$x]['org_picture']."' alt='".$groups[$x]['org_title']."'></a>";
+		echo "<div class='card-block'>";
+		echo "<h5 data-toggle='tooltip' data-placement='top' title='".$groups[$x]['org_title']."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
+		echo "<p  data-toggle='tooltip' data-placement='top' title='".$groups[$x]['org_description']."' class='card-text'>".$truncatedDesc."</p>
+		<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'>See More</a>
+		<p class='card-text'><small class='text-muted'>Members:".$groups[$x]['members_count']."</small></p></div></div>";
+	}
+}
+
+?>
+
+<script>
+$(document).ready(function(){
+	$('#select-tag').on('change', function() {
+    var value = $(this).find(':selected');
+		if(value.val() == "All")
+		{
+				$('.filter').show('1000');
+		}
+		else
+		{
+				$(".filter").not('.'+value.val()).hide('3000');
+				$('.filter').filter('.'+value.val()).show('3000');
+		}
+	});
+
+});
+</script>

@@ -19,10 +19,13 @@ class Signup extends CI_Controller {
 	}
 	
 	function index() {
+		// if the account was successfully created, redirect after delay to show success
+		if ($this->session->flashdata('editSuccess')) {
+			header("refresh:5; url=".base_url()."/index.php/login");
+		}
 		// set form validation rules
-		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('zip', 'Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
+		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[1]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email|is_unique[user.user_email]');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[cpassword]');
 		$this->form_validation->set_rules('cpassword', 'Confirm Password', 'trim|required');
@@ -39,15 +42,11 @@ class Signup extends CI_Controller {
 				'user_email' => $this->input->post('email'),
 				'User_password' => md5($this->input->post('password', TRUE))
 			);
-			//prepare to insert user location details into location table
-			$location_data = array(
-				'city' => '',
-				'zipcode' => $this->input->post('zip')
-			);
 			
-			if ($this->user_model->insert_user($user_data, $location_data)) {
+			if ($this->user_model->insert_user($user_data)) {
 				// success!!!
-				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Registered! Please login to access your Profile!</div>');
+				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Registered! You are being redirected... Please login to access your Profile!</div>');
+				$this->session->set_flashdata('editSuccess', true);
 				redirect('signup/index');
 			} else {
 				// error
